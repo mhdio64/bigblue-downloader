@@ -8,9 +8,15 @@ const fs = require('fs');
  */
 function getFFmpegPath() {
   try {
-    const ffmpegStatic = require('ffmpeg-static');
-    if (ffmpegStatic && fs.existsSync(ffmpegStatic)) {
-      return ffmpegStatic;
+    let ffmpegStatic = require('ffmpeg-static');
+    if (ffmpegStatic) {
+      const unpacked = ffmpegStatic.split('app.asar').join('app.asar.unpacked');
+      if (fs.existsSync(unpacked)) {
+        return unpacked;
+      }
+      if (fs.existsSync(ffmpegStatic)) {
+        return ffmpegStatic;
+      }
     }
   } catch {
     // fallback

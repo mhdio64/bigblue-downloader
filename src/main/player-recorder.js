@@ -2,7 +2,22 @@ const { BrowserWindow, ipcMain, session } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
-const ffmpeg = require('ffmpeg-static');
+
+function getFFmpegPath() {
+  try {
+    let ffmpegStatic = require('ffmpeg-static');
+    if (ffmpegStatic) {
+      const unpacked = ffmpegStatic.split('app.asar').join('app.asar.unpacked');
+      if (fs.existsSync(unpacked)) {
+        return unpacked;
+      }
+      if (fs.existsSync(ffmpegStatic)) {
+        return ffmpegStatic;
+      }
+    }
+  } catch {}
+  return 'ffmpeg';
+}
 
 /**
  * Records a BigBlueButton lecture directly from its in-app player in the background
@@ -255,7 +270,8 @@ function remuxWebmToMp4(inputWebm, outputMp4, onProgress) {
       outputMp4
     ];
 
-    const proc = spawn(ffmpeg, args);
+    const ffmpegBin = getFFmpegPath();
+    const proc = spawn(ffmpegBin, args);
     let stderr = '';
 
     proc.stderr.on('data', (d) => {

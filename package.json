@@ -1,26 +1,88 @@
 {
   "name": "bigblue-downloader",
   "version": "1.0.0",
-  "description": "BigBlueButton Video Downloader & Compositor for Linux Desktop",
+  "description": "BigBlueButton Video & Presentation Downloader for Desktop (Windows, macOS, Linux)",
   "main": "src/main/index.js",
   "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhdio64/bigblue-downloader.git"
+  },
   "scripts": {
     "start": "electron .",
-    "test": "node test/verify-modules.js"
+    "test": "node test/verify-modules.js",
+    "dist": "electron-builder",
+    "dist:linux": "electron-builder --linux",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
   },
   "keywords": [
     "bigbluebutton",
     "downloader",
     "electron",
     "video-compositor",
-    "linux"
+    "recorder",
+    "linux",
+    "windows",
+    "macos"
   ],
-  "author": "",
+  "author": "Mahdi <mhdio.mail@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "ffmpeg-static": "^5.2.0"
   },
   "devDependencies": {
-    "electron": "^34.3.0"
+    "electron": "^34.3.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.mhdio64.bigblue-downloader",
+    "productName": "BigBlueButton Downloader",
+    "executableName": "bigblue-downloader",
+    "copyright": "Copyright © 2026 Mahdi",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "**/node_modules/ffmpeg-static/**"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network",
+      "icon": "build/icon.png",
+      "synopsis": "BigBlueButton Video & Presentation Downloader",
+      "description": "High-speed direct stream extraction and composition for BigBlueButton recordings"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "build/icon.png",
+      "identity": null
+    }
   }
 }

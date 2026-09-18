@@ -6,6 +6,33 @@ A modern, lightweight, and high-performance desktop application built with **Ele
   <img src="docs/assets/screenshot.png" alt="BigBlueButton Downloader Screenshot" width="850">
 </p>
 
+<p align="center">
+  <a href="https://github.com/mhdio64/bigblue-downloader/releases/latest">
+    <img src="https://img.shields.io/github/v/release/mhdio64/bigblue-downloader?style=for-the-badge&color=4f46e5" alt="Latest Release">
+  </a>
+  <a href="https://github.com/mhdio64/bigblue-downloader/actions/workflows/release.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/mhdio64/bigblue-downloader/release.yml?style=for-the-badge&label=Build%20Status" alt="Build Status">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License: MIT">
+  </a>
+</p>
+
+---
+
+## 📥 Download Pre-built Binaries
+
+Pre-compiled, ready-to-run binaries for **Windows**, **macOS**, and **Linux** are available on the **[GitHub Releases](https://github.com/mhdio64/bigblue-downloader/releases/latest)** page:
+
+| Operating System | Package | Instructions |
+| :--- | :--- | :--- |
+| **🪟 Windows (x64)** | `BigBlueButton-Downloader-Setup-*.exe` | Run installer and follow prompts |
+| **🪟 Windows (Portable)** | `BigBlueButton-Downloader-*.exe` | Standalone portable executable |
+| **🍏 macOS (x64 / Apple Silicon)** | `BigBlueButton-Downloader-*.dmg` | Open DMG and drag into Applications |
+| **🍏 macOS (Zip)** | `BigBlueButton-Downloader-*-mac.zip` | Extract and launch app directly |
+| **🐧 Linux (Universal)** | `BigBlueButton-Downloader-*.AppImage` | `chmod +x *.AppImage && ./*.AppImage` |
+| **🐧 Linux (Debian / Ubuntu)** | `bigblue-downloader_*_amd64.deb` | `sudo dpkg -i *.deb` |
+
 ---
 
 ## ✨ Key Features
