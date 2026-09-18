@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BigBlueButton Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <!-- Download SVG Icon -->
+          <svg viewBox="0 0 24 24">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            BigBlueButton Downloader
+            <span class="brand-badge">Desktop • Linux</span>
+          </div>
+          <div class="brand-subtitle">High-speed direct stream extraction & FFmpeg composition</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-open-lms" class="icon-btn" title="Open built-in browser to log into University / LMS portal (Moodle, Relate, etc.)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+          </svg>
+          <span id="lms-btn-text">LMS Login</span>
+          <span id="lms-status-indicator" class="lms-indicator-dot" title="LMS Authentication Status"></span>
+        </button>
+        <button id="btn-open-output-dir" class="icon-btn" title="Open downloads folder in file manager">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+          </svg>
+          Downloads Folder
+        </button>
+        <button id="btn-open-settings" class="icon-btn" title="Open settings">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+          </svg>
+          Settings
+        </button>
+      </div>
+    </header>
+
+    <!-- URL Input Section -->
+    <section class="input-section">
+      <!-- Mode Switcher Tabs -->
+      <div class="mode-selector">
+        <button type="button" class="mode-tab active" id="mode-tab-direct" data-mode="direct">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-6 10.5z"/>
+          </svg>
+          Direct Stream Download
+        </button>
+        <button type="button" class="mode-tab" id="mode-tab-record" data-mode="record">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="8"/>
+          </svg>
+          Live Player Recorder
+        </button>
+      </div>
+
+      <form id="url-form" class="url-form">
+        <div class="url-input-wrapper">
+          <div class="url-input-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="input-url" 
+            class="url-input" 
+            placeholder="Paste BigBlueButton recording link (e.g. https://domain/playback/presentation/2.3/...)" 
+            autocomplete="off" 
+            required 
+          />
+        </div>
+        <button type="submit" id="btn-submit" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="btn-submit-icon">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+          <span id="btn-submit-text">Add to Queue</span>
+        </button>
+      </form>
+
+      <!-- Options shown only in Player Recorder mode -->
+      <div id="record-mode-options" class="record-mode-options" style="display: none;">
+        <label class="record-opt-label">
+          <input type="checkbox" id="record-mute-speakers" checked>
+          <span>Mute Speakers During Recording (Keeps environment completely silent)</span>
+        </label>
+        <span class="record-opt-badge">Headless Background</span>
+      </div>
+
+      <div class="input-hint" id="mode-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        <span id="mode-hint-text">Direct media streams are downloaded at maximum network bandwidth and cleanly stitched with FFmpeg.</span>
+      </div>
+    </section>
+
+    <!-- Active Job Hero Card (Hidden when idle) -->
+    <section id="active-card" class="active-download-card" style="display: none;">
+      <div class="active-download-header">
+        <div class="active-download-title-group">
+          <div class="active-download-badge">
+            <span class="active-pulse-dot"></span>
+            Processing Recording
+          </div>
+          <h2 id="active-title" class="active-download-title">Meeting Title...</h2>
+          <div id="active-meta" class="active-download-meta">Date: -- | Duration: --</div>
+        </div>
+        <div class="active-download-actions">
+          <button id="btn-pause-active" class="btn-pause">Pause</button>
+          <button id="btn-cancel-active" class="btn-cancel">Cancel</button>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-info">
+          <span id="active-stage" class="progress-stage">Initializing...</span>
+          <span id="active-percent" class="progress-percent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="active-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Download Speed</div>
+          <div id="metric-speed" class="metric-value">--</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Current Stage</div>
+          <div id="metric-status" class="metric-value">Downloading Streams</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Video Quality</div>
+          <div class="metric-value">Source FHD (Bit-Perfect)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Composition</div>
+          <div class="metric-value">FFmpeg H.264 / AAC</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Queue & History List -->
+    <section class="queue-section">
+      <div class="queue-header">
+        <div class="queue-title">
+          Queue & History
+          <span id="queue-count" class="queue-counter">0 items</span>
+        </div>
+      </div>
+
+      <div id="queue-list" class="queue-list">
+        <!-- Dynamic job cards will be rendered here -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-queue" class="empty-queue">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+        </svg>
+        <div style="font-weight: 600;">No recordings in queue</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">Enter a BigBlueButton playback link above to start downloading.</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Application Settings</h3>
+        <button id="btn-close-settings" class="modal-close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="setting-group">
+          <label class="setting-label">Destination Directory</label>
+          <div class="setting-desc">Final MP4 videos and optional chat logs will be saved to this directory.</div>
+          <div class="setting-input-row">
+            <input type="text" id="setting-output-dir" class="setting-text-input" readonly />
+            <button id="btn-browse-dir" class="icon-btn">Browse...</button>
+          </div>
+        </div>
+
+        <div class="setting-toggle-row">
+          <div>
+            <div class="setting-label">Desktop Notifications</div>
+            <div class="setting-desc">Send native system notifications when a download completes.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-notify" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-toggle-row">
+          <div>
+            <div class="setting-label">Export Public Chat Log</div>
+            <div class="setting-desc">Save timestamped public chat messages as a companion .txt file.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-chat" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-toggle-row">
+          <div>
+            <div class="setting-label">Generate Slides PDF Booklet</div>
+            <div class="setting-desc">Automatically create a high-resolution PDF document from presentation slides.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-slide-pdf" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-toggle-row">
+          <div>
+            <div class="setting-label">Mute Speakers During Live Recording</div>
+            <div class="setting-desc">Keep your speakers silent during in-app live recording while fully capturing clear instructor voice.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-mute-speakers" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-toggle-row">
+          <div>
+            <div class="setting-label">Teacher Webcam Overlay (Picture-in-Picture)</div>
+            <div class="setting-desc">When disabled, only the main screen presentation and the teacher's voice are saved.</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="setting-webcam-video">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-group" style="border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 16px;">
+          <label class="setting-label">University / LMS Authentication</label>
+          <div class="setting-desc">Set your university portal address (e.g. Moodle, Relate, VC) to open directly on click.</div>
+          <div class="setting-input-row" style="margin-top: 8px;">
+            <input type="text" id="setting-lms-portal-url" class="setting-text-input" placeholder="https://lms.university.ac.ir" />
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button type="button" id="btn-settings-open-lms" class="icon-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3z"/>
+              </svg>
+              Open LMS Browser
+            </button>
+            <button type="button" id="btn-clear-lms-session" class="icon-btn" style="color: var(--status-danger-text);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+              Clear Stored Session
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-save-settings" class="btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

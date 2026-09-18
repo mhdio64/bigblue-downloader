@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>LMS Portal Navigation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/variables.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      height: 50px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .btn-icon:hover:not(:disabled) {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    .btn-icon:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .btn-icon svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    .address-bar-form {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .address-bar-wrapper {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      padding: 0 8px 0 12px;
+      height: 36px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-fast);
+    }
+
+    .address-bar-wrapper:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: var(--border-glow);
+    }
+
+    .address-bar-icon {
+      color: var(--text-muted);
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .address-bar-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 13.5px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: transparent;
+      user-select: text;
+    }
+
+    .address-bar-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn-go {
+      background: var(--accent-primary);
+      border: none;
+      color: #ffffff;
+      border-radius: var(--radius-xs);
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition-fast);
+    }
+
+    .btn-go:hover {
+      background: var(--accent-primary-hover);
+    }
+
+    .btn-action {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      height: 34px;
+      padding: 0 10px;
+      font-size: 12.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition-fast);
+    }
+
+    .btn-action:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border-color: var(--border-default);
+    }
+
+    .btn-action svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .pill-recording {
+      display: none;
+      background: #059669;
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-pill);
+      height: 34px;
+      padding: 0 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      animation: pulseGlow 2s infinite;
+    }
+
+    .pill-recording.active {
+      display: flex;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(5, 150, 105, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-buttons">
+    <button id="btn-back" class="btn-icon" title="Go Back" disabled>
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <button id="btn-forward" class="btn-icon" title="Go Forward" disabled>
+      <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </button>
+    <button id="btn-reload" class="btn-icon" title="Reload Page">
+      <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+    </button>
+    <button id="btn-home" class="btn-icon" title="Portal Home / University Selection">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </button>
+  </div>
+
+  <form id="address-form" class="address-bar-form">
+    <div class="address-bar-wrapper">
+      <div class="address-bar-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+      </div>
+      <input 
+        type="text" 
+        id="address-input" 
+        class="address-bar-input" 
+        placeholder="Enter university LMS portal address (e.g. https://lms.ut.ac.ir)..." 
+        autocomplete="off" 
+        spellcheck="false"
+      />
+      <button type="submit" class="btn-go" title="Navigate">
+        Go
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42L16.86 11H5v2z"/></svg>
+      </button>
+    </div>
+  </form>
+
+  <!-- Quick Default Portal Button -->
+  <button id="btn-set-default" class="btn-action" title="Save this portal as your default launch URL">
+    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    Set Default
+  </button>
+
+  <!-- BigBlueButton Recording Detected Pill -->
+  <button id="pill-recording-detected" class="pill-recording" title="Download detected BigBlueButton recording">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+    </svg>
+    <span>Add Recording to Queue</span>
+  </button>
+
+  <script>
+    const addressInput = document.getElementById('address-input');
+    const addressForm = document.getElementById('address-form');
+    const btnBack = document.getElementById('btn-back');
+    const btnForward = document.getElementById('btn-forward');
+    const btnReload = document.getElementById('btn-reload');
+    const btnHome = document.getElementById('btn-home');
+    const btnSetDefault = document.getElementById('btn-set-default');
+    const pillRecording = document.getElementById('pill-recording-detected');
+
+    let currentUrl = '';
+    let detectedRecordingUrl = '';
+
+    addressForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = addressInput.value.trim();
+      if (val) {
+        window.lmsToolbar.navigate(val);
+      }
+    });
+
+    btnBack.addEventListener('click', () => window.lmsToolbar.goBack());
+    btnForward.addEventListener('click', () => window.lmsToolbar.goForward());
+    btnReload.addEventListener('click', () => window.lmsToolbar.reload());
+    btnHome.addEventListener('click', () => window.lmsToolbar.goHome());
+
+    btnSetDefault.addEventListener('click', () => {
+      if (currentUrl && !currentUrl.startsWith('file://')) {
+        try {
+          const origin = new URL(currentUrl).origin;
+          window.lmsToolbar.saveDefaultPortal(origin);
+          btnSetDefault.textContent = '✔ Saved Default';
+          setTimeout(() => {
+            btnSetDefault.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> Set Default';
+          }, 2000);
+        } catch {}
+      }
+    });
+
+    pillRecording.addEventListener('click', () => {
+      if (detectedRecordingUrl) {
+        window.lmsToolbar.importRecording(detectedRecordingUrl);
+        pillRecording.querySelector('span').textContent = '✔ Added to Queue!';
+        setTimeout(() => {
+          pillRecording.classList.remove('active');
+          pillRecording.querySelector('span').textContent = 'Add Recording to Queue';
+        }, 3000);
+      }
+    });
+
+    // Listen for state changes from the BrowserView
+    window.lmsToolbar.onNavStateChanged((state) => {
+      currentUrl = state.url || '';
+      if (!currentUrl.startsWith('file://')) {
+        addressInput.value = currentUrl;
+      } else {
+        addressInput.value = '';
+        addressInput.placeholder = 'Enter university LMS portal address (e.g. https://lms.ut.ac.ir)...';
+      }
+      btnBack.disabled = !state.canGoBack;
+      btnForward.disabled = !state.canGoForward;
+    });
+
+    window.lmsToolbar.onRecordingDetected(({ url }) => {
+      detectedRecordingUrl = url;
+      pillRecording.classList.add('active');
+    });
+  </script>
+</body>
+</html>

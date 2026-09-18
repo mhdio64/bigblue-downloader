@@ -1,0 +1,63 @@
+:root {
+  /* Soft Dimmed Slate Palette (Eye-Friendly Mid-Tone: Neither Dark Nor Harsh White) */
+  --bg-base: #e2e8f0;             /* Calm slate gray background */
+  --bg-surface: #f1f5f9;          /* Slate-100 card surface */
+  --bg-surface-elevated: #f8fafc; /* Crisp elevated card surface */
+  --bg-surface-hover: #e2e8f0;    /* Interactive hover state */
+  --bg-subtle: #cbd5e1;
+  
+  /* Borders & Dividers */
+  --border-subtle: #cbd5e1;       /* Slate-300 distinct boundary */
+  --border-default: #94a3b8;      /* Slate-400 */
+  --border-focus: #4f46e5;
+  --border-glow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+
+  /* Primary Brand SaaS Accent (Royal Indigo) */
+  --accent-primary: #4338ca;
+  --accent-primary-hover: #3730a3;
+  --accent-gradient: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+  --accent-glow: 0 4px 14px 0 rgba(67, 56, 202, 0.25);
+
+  /* Status Badges (Comfortable Mid-Tone Palette) */
+  --status-queued-bg: #e2e8f0;
+  --status-queued-text: #475569;
+  --status-queued-border: #cbd5e1;
+
+  --status-active-bg: #e0e7ff;
+  --status-active-text: #3730a3;
+  --status-active-border: #a5b4fc;
+
+  --status-success-bg: #d1fae5;
+  --status-success-text: #065f46;
+  --status-success-border: #6ee7b7;
+
+  --status-danger-bg: #fee2e2;
+  --status-danger-text: #991b1b;
+  --status-danger-border: #fca5a5;
+
+  --status-paused-bg: #fef3c7;
+  --status-paused-text: #92400e;
+  --status-paused-border: #fcd34d;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --text-primary: #0f172a;        /* Deep slate-900 */
+  --text-secondary: #334155;      /* Slate-700 */
+  --text-muted: #64748b;          /* Slate-500 */
+
+  /* Elevation & Soft Shadows */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 5px -1px rgba(0, 0, 0, 0.06), 0 1px 3px -1px rgba(0, 0, 0, 0.04);
+  --shadow-card-elevated: 0 10px 22px -4px rgba(0, 0, 0, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04);
+  --shadow-modal: 0 20px 35px -5px rgba(15, 23, 42, 0.22);
+
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -1,0 +1,26 @@
+{
+  "name": "bigblue-downloader",
+  "version": "1.0.0",
+  "description": "BigBlueButton Video Downloader & Compositor for Linux Desktop",
+  "main": "src/main/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/verify-modules.js"
+  },
+  "keywords": [
+    "bigbluebutton",
+    "downloader",
+    "electron",
+    "video-compositor",
+    "linux"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0"
+  },
+  "devDependencies": {
+    "electron": "^34.3.0"
+  }
+}
