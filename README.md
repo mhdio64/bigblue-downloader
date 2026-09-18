@@ -2,6 +2,10 @@
 
 A modern, lightweight, and high-performance desktop application built with **Electron.js** and **FFmpeg** to download, record, and convert **BigBlueButton (BBB)** recorded sessions into high-definition MP4 videos, presentation PDF booklets, and public chat logs.
 
+<p align="center">
+  <img src="docs/assets/screenshot.png" alt="BigBlueButton Downloader Screenshot" width="850">
+</p>
+
 ---
 
 ## ✨ Key Features
