@@ -93,7 +93,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="btn-submit-icon">
             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
           </svg>
-          <span id="btn-submit-text">Add to Queue</span>
+          <span id="btn-submit-text">Download</span>
         </button>
       </form>
 
@@ -106,22 +106,25 @@
           <span class="volume-title">Output Audio Volume:</span>
         </div>
         <div class="volume-input-wrapper">
+          <button type="button" id="btn-vol-minus" class="volume-step-btn" title="Decrease volume by 25%">−</button>
           <input 
             type="number" 
             id="input-audio-volume" 
             class="volume-number-input" 
-            min="10" 
+            min="25" 
             max="500" 
-            step="5" 
+            step="25" 
             value="100" 
-            title="Audio output volume in percent (e.g. 120, 50, 200)"
+            title="Audio output volume in percent (e.g. 125, 150, or type custom value like 120)"
           />
           <span class="volume-percent-sign">%</span>
+          <button type="button" id="btn-vol-plus" class="volume-step-btn" title="Increase volume by 25%">+</button>
         </div>
         <div class="volume-presets">
           <button type="button" class="volume-pill" data-vol="50">50%</button>
+          <button type="button" class="volume-pill" data-vol="75">75%</button>
           <button type="button" class="volume-pill active" data-vol="100">100%</button>
-          <button type="button" class="volume-pill" data-vol="120">120%</button>
+          <button type="button" class="volume-pill" data-vol="125">125%</button>
           <button type="button" class="volume-pill" data-vol="150">150%</button>
           <button type="button" class="volume-pill" data-vol="200">200%</button>
         </div>
@@ -292,15 +295,15 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <label class="setting-label" for="setting-audio-volume">Default Output Audio Volume (%)</label>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <input type="number" id="setting-audio-volume" class="volume-setting-input" min="10" max="500" step="5" value="100" />
+              <input type="number" id="setting-audio-volume" class="volume-setting-input" min="25" max="500" step="25" value="100" />
               <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">%</span>
               <button type="button" id="btn-reset-volume" class="volume-reset-btn" title="Reset to 100% (Normal)">Reset</button>
             </div>
           </div>
-          <div class="setting-desc">Boost quiet teacher microphones or decrease loud recordings (e.g. 120% or 200% for amplification, 50% to lower).</div>
+          <div class="setting-desc">Boost quiet teacher microphones or decrease loud recordings (e.g. 125% or 200% for amplification, 50% to lower).</div>
           <div style="display: flex; align-items: center; gap: 12px; margin-top: 8px;">
-            <span style="font-size: 12px; color: var(--text-muted); font-weight: 500;">50%</span>
-            <input type="range" id="setting-audio-volume-slider" min="25" max="300" step="5" value="100" class="volume-slider" style="flex: 1;" />
+            <span style="font-size: 12px; color: var(--text-muted); font-weight: 500;">25%</span>
+            <input type="range" id="setting-audio-volume-slider" min="25" max="300" step="25" value="100" class="volume-slider" style="flex: 1;" />
             <span style="font-size: 12px; color: var(--text-muted); font-weight: 500;">300%</span>
           </div>
         </div>

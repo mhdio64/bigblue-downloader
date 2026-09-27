@@ -922,6 +922,36 @@ input:checked + .toggle-slider:before {
   box-shadow: var(--border-glow);
 }
 
+.volume-step-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  user-select: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.volume-step-btn:hover {
+  background: #ffffff;
+  color: var(--accent-primary);
+  border-color: var(--border-medium);
+}
+
+.volume-step-btn:active {
+  background: var(--bg-subtle);
+  transform: scale(0.92);
+}
+
 .volume-number-input {
   width: 50px;
   border: none;

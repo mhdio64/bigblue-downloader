@@ -57,6 +57,8 @@ const btnOpenOutputDir = document.getElementById('btn-open-output-dir');
 // Audio Volume Elements (Main Screen)
 const inputAudioVolume = document.getElementById('input-audio-volume');
 const volumePills = document.querySelectorAll('.volume-pill');
+const btnVolMinus = document.getElementById('btn-vol-minus');
+const btnVolPlus = document.getElementById('btn-vol-plus');
 
 // LMS Portal Elements
 const btnOpenLMS = document.getElementById('btn-open-lms');
@@ -340,7 +342,7 @@ if (modeTabDirect && modeTabRecord) {
     modeTabDirect.classList.add('active');
     modeTabRecord.classList.remove('active');
     if (recordModeOptions) recordModeOptions.style.display = 'none';
-    if (btnSubmitText) btnSubmitText.textContent = 'Add to Queue';
+    if (btnSubmitText) btnSubmitText.textContent = 'Download';
     if (modeHintText) modeHintText.textContent = 'Direct media streams are downloaded at maximum network bandwidth and cleanly stitched with FFmpeg.';
   });
 
@@ -384,7 +386,7 @@ urlForm.addEventListener('submit', async (e) => {
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
       </svg>
-      <span id="btn-submit-text">${currentMode === 'record' ? 'Start Player Record' : 'Add to Queue'}</span>
+      <span id="btn-submit-text">${currentMode === 'record' ? 'Start Player Record' : 'Download'}</span>
     `;
   }
 });
@@ -413,6 +415,28 @@ if (inputAudioVolume) {
       syncVolumePills(vol);
     });
   });
+
+  if (btnVolMinus) {
+    btnVolMinus.addEventListener('click', () => {
+      let current = parseInt(inputAudioVolume.value, 10);
+      if (isNaN(current)) current = 100;
+      let next = Math.floor((current - 1) / 25) * 25;
+      if (next < 25) next = 25;
+      inputAudioVolume.value = next;
+      syncVolumePills(next);
+    });
+  }
+
+  if (btnVolPlus) {
+    btnVolPlus.addEventListener('click', () => {
+      let current = parseInt(inputAudioVolume.value, 10);
+      if (isNaN(current)) current = 100;
+      let next = Math.ceil((current + 1) / 25) * 25;
+      if (next > 500) next = 500;
+      inputAudioVolume.value = next;
+      syncVolumePills(next);
+    });
+  }
 }
 
 if (settingAudioVolume && settingAudioVolumeSlider) {
