@@ -48,8 +48,15 @@ const settingSlidePdf = document.getElementById('setting-slide-pdf');
 const settingMuteSpeakers = document.getElementById('setting-mute-speakers');
 const settingWebcamVideo = document.getElementById('setting-webcam-video');
 const settingLmsPortalUrl = document.getElementById('setting-lms-portal-url');
+const settingAudioVolume = document.getElementById('setting-audio-volume');
+const settingAudioVolumeSlider = document.getElementById('setting-audio-volume-slider');
+const btnResetVolume = document.getElementById('btn-reset-volume');
 const btnSaveSettings = document.getElementById('btn-save-settings');
 const btnOpenOutputDir = document.getElementById('btn-open-output-dir');
+
+// Audio Volume Elements (Main Screen)
+const inputAudioVolume = document.getElementById('input-audio-volume');
+const volumePills = document.querySelectorAll('.volume-pill');
 
 // LMS Portal Elements
 const btnOpenLMS = document.getElementById('btn-open-lms');
@@ -78,6 +85,11 @@ function formatTime(seconds) {
 async function initApp() {
   currentSettings = await window.bbbApi.getSettings();
   updateSettingsForm(currentSettings);
+
+  if (currentSettings && currentSettings.audioVolume && inputAudioVolume) {
+    inputAudioVolume.value = currentSettings.audioVolume;
+    syncVolumePills(currentSettings.audioVolume);
+  }
 
   jobsList = await window.bbbApi.getJobs();
   renderQueue();
@@ -254,6 +266,7 @@ function renderQueue() {
             <span>Date: ${job.date}</span>
             <span>Duration: ${formatTime(job.durationSeconds)}</span>
             ${job.mode === 'record' ? '<span style="font-size:11px;padding:2px 6px;border-radius:4px;background:rgba(239,68,68,0.1);color:#ef4444;font-weight:700;">Live Record</span>' : ''}
+            ${job.audioVolume && job.audioVolume !== 100 ? `<span style="font-size:11px;padding:2px 6px;border-radius:4px;background:rgba(79,70,229,0.1);color:var(--accent-primary);font-weight:700;">🔊 ${job.audioVolume}% Vol</span>` : ''}
             <span class="queue-item-status ${statusMeta.class}">
               ${statusMeta.text}
             </span>
@@ -353,10 +366,14 @@ urlForm.addEventListener('submit', async (e) => {
     Checking...
   `;
 
+  const volVal = inputAudioVolume ? parseInt(inputAudioVolume.value, 10) : 100;
+  const audioVolume = (isNaN(volVal) || volVal <= 0) ? 100 : Math.max(10, Math.min(500, volVal));
+
   try {
     await window.bbbApi.addJob(url, {
       mode: currentMode,
-      muteSpeaker: recordMuteSpeakers ? recordMuteSpeakers.checked : true
+      muteSpeaker: recordMuteSpeakers ? recordMuteSpeakers.checked : true,
+      audioVolume: audioVolume
     });
     inputUrl.value = '';
   } catch (err) {
@@ -372,6 +389,52 @@ urlForm.addEventListener('submit', async (e) => {
   }
 });
 
+// Audio Volume Pill and Input Sync
+function syncVolumePills(val) {
+  volumePills.forEach(pill => {
+    if (parseInt(pill.dataset.vol, 10) === val) {
+      pill.classList.add('active');
+    } else {
+      pill.classList.remove('active');
+    }
+  });
+}
+
+if (inputAudioVolume) {
+  inputAudioVolume.addEventListener('input', () => {
+    const val = parseInt(inputAudioVolume.value, 10);
+    syncVolumePills(val);
+  });
+
+  volumePills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const vol = parseInt(pill.dataset.vol, 10);
+      inputAudioVolume.value = vol;
+      syncVolumePills(vol);
+    });
+  });
+}
+
+if (settingAudioVolume && settingAudioVolumeSlider) {
+  settingAudioVolumeSlider.addEventListener('input', () => {
+    settingAudioVolume.value = settingAudioVolumeSlider.value;
+  });
+
+  settingAudioVolume.addEventListener('input', () => {
+    const val = parseInt(settingAudioVolume.value, 10);
+    if (!isNaN(val)) {
+      settingAudioVolumeSlider.value = Math.min(300, Math.max(25, val));
+    }
+  });
+
+  if (btnResetVolume) {
+    btnResetVolume.addEventListener('click', () => {
+      settingAudioVolume.value = 100;
+      settingAudioVolumeSlider.value = 100;
+    });
+  }
+}
+
 // Settings Management
 function updateSettingsForm(settings) {
   if (settings.outputDirectory) settingOutputDir.value = settings.outputDirectory;
@@ -381,6 +444,10 @@ function updateSettingsForm(settings) {
   if (typeof settings.muteSpeakerRecording === 'boolean' && settingMuteSpeakers) settingMuteSpeakers.checked = settings.muteSpeakerRecording;
   settingWebcamVideo.checked = !!settings.includeWebcamVideo;
   if (settingLmsPortalUrl) settingLmsPortalUrl.value = settings.lmsPortalUrl || '';
+  
+  const vol = settings.audioVolume || 100;
+  if (settingAudioVolume) settingAudioVolume.value = vol;
+  if (settingAudioVolumeSlider) settingAudioVolumeSlider.value = Math.min(300, Math.max(25, vol));
 }
 
 btnOpenSettings.addEventListener('click', () => {
@@ -406,6 +473,9 @@ btnBrowseDir.addEventListener('click', async () => {
 });
 
 btnSaveSettings.addEventListener('click', async () => {
+  const volVal = settingAudioVolume ? (parseInt(settingAudioVolume.value, 10) || 100) : 100;
+  const audioVolume = Math.max(10, Math.min(500, volVal));
+
   const newSettings = {
     outputDirectory: settingOutputDir.value.trim(),
     enableNotification: settingNotify.checked,
@@ -413,10 +483,15 @@ btnSaveSettings.addEventListener('click', async () => {
     generateSlidePdf: settingSlidePdf ? settingSlidePdf.checked : true,
     muteSpeakerRecording: settingMuteSpeakers ? settingMuteSpeakers.checked : true,
     includeWebcamVideo: settingWebcamVideo.checked,
-    lmsPortalUrl: settingLmsPortalUrl ? settingLmsPortalUrl.value.trim() : ''
+    lmsPortalUrl: settingLmsPortalUrl ? settingLmsPortalUrl.value.trim() : '',
+    audioVolume: audioVolume
   };
 
   currentSettings = await window.bbbApi.saveSettings(newSettings);
+  if (inputAudioVolume) {
+    inputAudioVolume.value = audioVolume;
+    syncVolumePills(audioVolume);
+  }
   settingsModal.classList.remove('active');
   await updateLMSStatus();
 });

@@ -5,7 +5,7 @@ const { setMaxListeners } = require('events');
 const { getMeetingMetadata } = require('./metadata');
 const { downloadMeetingMedia } = require('./media-downloader');
 const { exportMeetingChat } = require('./chat');
-const { stitchMediaStreams } = require('./muxer');
+const { stitchMediaStreams, parseVolumePercent } = require('./muxer');
 const { sendDesktopNotification } = require('./notifications');
 const { getLMSCookies } = require('./lms-browser');
 const {
@@ -35,7 +35,8 @@ class QueueManager {
       generateSlidePdf: true, // Automatically generate slide booklet PDF
       muteSpeakerRecording: true, // Mute local speakers during live player recording
       includeWebcamVideo: false, // Default: main screen presentation and teacher audio only
-      lmsPortalUrl: '' // University portal or LMS URL
+      lmsPortalUrl: '', // University portal or LMS URL
+      audioVolume: 100 // Output audio volume percentage (default: 100%)
     };
 
     // Ensure output directory exists
@@ -89,6 +90,10 @@ class QueueManager {
     const muteSpeaker = typeof options.muteSpeaker === 'boolean' 
       ? options.muteSpeaker 
       : (this.settings.muteSpeakerRecording !== false);
+    const audioVolume = parseVolumePercent(
+      options.audioVolume !== undefined ? options.audioVolume : this.settings.audioVolume,
+      100
+    );
 
     // If cookies were not explicitly provided, attempt to pull any stored LMS session cookies
     let cookies = options.cookies || '';
@@ -105,6 +110,7 @@ class QueueManager {
       url: rawUrl,
       mode: mode,
       muteSpeaker: muteSpeaker,
+      audioVolume: audioVolume,
       meetingId: '',
       title: mode === 'record' ? 'Player Recording...' : 'Fetching meeting metadata...',
       date: new Date().toISOString().split('T')[0],
@@ -284,6 +290,7 @@ class QueueManager {
           tempDir,
           cookies: nextJob.cookies,
           muteSpeaker: nextJob.muteSpeaker !== false,
+          audioVolume: nextJob.audioVolume,
           signal: controller.signal,
           onProgress: (p) => {
             this.sendToUI('bbb:job-progress', {
@@ -519,6 +526,7 @@ class QueueManager {
         outputPath: finalMp4Path
       }, {
         includeWebcamVideo: !!this.settings.includeWebcamVideo,
+        audioVolume: nextJob.audioVolume,
         totalDuration: nextJob.durationSeconds,
         signal: controller.signal,
         onProgress: (percent) => {

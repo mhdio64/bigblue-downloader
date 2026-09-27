@@ -99,6 +99,53 @@ function runTests() {
     throw new Error(`Expected '0:v' and '1:a?', got: ${JSON.stringify(maps4)}`);
   }
 
+  // Test 5: Audio Volume Boost 120%
+  const argsVol120 = buildFFmpegArgs({
+    desksharePath: '/tmp/raw_deskshare.webm',
+    audioPath: '/tmp/raw_audio.ogg',
+    outputPath: '/tmp/output_vol120.mp4'
+  }, { audioVolume: 120 });
+  const filterIdx120 = argsVol120.indexOf('-filter:a');
+  if (filterIdx120 === -1 || argsVol120[filterIdx120 + 1] !== 'volume=1.2') {
+    throw new Error(`Expected -filter:a volume=1.2 for 120%, got: ${JSON.stringify(argsVol120)}`);
+  }
+  console.log('[✔] Audio Volume 120% passed: -filter:a volume=1.2');
+
+  // Test 6: Audio Volume 50%
+  const argsVol50 = buildFFmpegArgs({
+    desksharePath: '/tmp/raw_deskshare.webm',
+    audioPath: '/tmp/raw_audio.ogg',
+    outputPath: '/tmp/output_vol50.mp4'
+  }, { audioVolume: 50 });
+  const filterIdx50 = argsVol50.indexOf('-filter:a');
+  if (filterIdx50 === -1 || argsVol50[filterIdx50 + 1] !== 'volume=0.5') {
+    throw new Error(`Expected -filter:a volume=0.5 for 50%, got: ${JSON.stringify(argsVol50)}`);
+  }
+  console.log('[✔] Audio Volume 50% passed: -filter:a volume=0.5');
+
+  // Test 7: Audio Volume Boost 200%
+  const argsVol200 = buildFFmpegArgs({
+    desksharePath: '/tmp/raw_deskshare.webm',
+    audioPath: '/tmp/raw_audio.ogg',
+    outputPath: '/tmp/output_vol200.mp4'
+  }, { audioVolume: 200 });
+  const filterIdx200 = argsVol200.indexOf('-filter:a');
+  if (filterIdx200 === -1 || argsVol200[filterIdx200 + 1] !== 'volume=2') {
+    throw new Error(`Expected -filter:a volume=2 for 200%, got: ${JSON.stringify(argsVol200)}`);
+  }
+  console.log('[✔] Audio Volume 200% passed: -filter:a volume=2');
+
+  // Test 8: Audio Volume Default 100% (No filter added)
+  const argsVol100 = buildFFmpegArgs({
+    desksharePath: '/tmp/raw_deskshare.webm',
+    audioPath: '/tmp/raw_audio.ogg',
+    outputPath: '/tmp/output_vol100.mp4'
+  }, { audioVolume: 100 });
+  if (argsVol100.includes('-filter:a')) {
+    throw new Error('Expected no -filter:a for 100% volume');
+  }
+  console.log('[✔] Audio Volume 100% passed: No -filter:a applied');
+
   console.log('\n========================================');
   console.log('✔ All FFmpeg index and arg tests PASSED!');
   console.log('========================================');

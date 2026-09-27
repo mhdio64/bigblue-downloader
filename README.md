@@ -42,6 +42,8 @@ Pre-compiled, ready-to-run binaries for **Windows**, **macOS**, and **Linux** ar
   * **Live In-App Player Recorder**: Records the entire interactive session canvas seamlessly in a headless background window—ideal for sessions with complex transitions between slides, whiteboard drawings, and screen shares without requiring an external browser.
 * **🔇 Silent Background Recording**:
   * Playback audio can be completely muted locally on your speakers/headphones while preserving crystal-clear audio within the recorded MP4 file.
+* **🔊 Custom Output Audio Volume & Boost**:
+  * Adjust or amplify instructor speech volume in exported MP4s as a percentage (e.g. 120% or 200% for quiet recordings, 50% to lower volume) with quick presets (`50%`, `100%`, `120%`, `150%`, `200%`) or custom values up to 500%.
 * **📚 Presentation Slide PDF Booklet**:
   * Automatically compiles all presentation slides into a standalone, printable, high-resolution PDF document with a clean cover page and slide numbering.
 * **🎓 Integrated LMS / Moodle Portal**:

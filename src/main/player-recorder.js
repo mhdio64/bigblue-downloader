@@ -258,6 +258,9 @@ function remuxWebmToMp4(inputWebm, outputMp4, onProgress) {
       });
     }
 
+    const { parseVolumePercent } = require('./muxer');
+    const volPercent = parseVolumePercent(options.audioVolume, 100);
+
     const args = [
       '-y',
       '-i', inputWebm,
@@ -265,10 +268,18 @@ function remuxWebmToMp4(inputWebm, outputMp4, onProgress) {
       '-preset', 'veryfast',
       '-crf', '22',
       '-c:a', 'aac',
-      '-b:a', '192k',
+      '-b:a', '192k'
+    ];
+
+    if (volPercent !== 100) {
+      const factor = Number((volPercent / 100).toFixed(2));
+      args.push('-filter:a', `volume=${factor}`);
+    }
+
+    args.push(
       '-movflags', '+faststart',
       outputMp4
-    ];
+    );
 
     const ffmpegBin = getFFmpegPath();
     const proc = spawn(ffmpegBin, args);

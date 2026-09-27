@@ -41,6 +41,22 @@ function parseFFmpegTime(timeStr) {
 }
 
 /**
+ * Normalizes and clamps volume percentage to a safe range (10% to 500%)
+ * @param {number|string|undefined} val
+ * @param {number} [defaultVal=100]
+ * @returns {number}
+ */
+function parseVolumePercent(val, defaultVal = 100) {
+  if (val === undefined || val === null || val === '') return defaultVal;
+  if (typeof val === 'string') {
+    val = val.replace('%', '').trim();
+  }
+  const num = parseFloat(val);
+  if (isNaN(num) || num <= 0) return defaultVal;
+  return Math.max(10, Math.min(500, Math.round(num)));
+}
+
+/**
  * Stitches downloaded BBB media tracks (slides, deskshare, webcams, audio) into a single cohesive MP4
  * 
  * @param {object} params
@@ -183,7 +199,16 @@ function buildFFmpegArgs({
     '-preset', 'veryfast',
     '-crf', '22',
     '-c:a', 'aac',
-    '-b:a', '192k',
+    '-b:a', '192k'
+  );
+
+  const volPercent = parseVolumePercent(options.audioVolume, 100);
+  if (volPercent !== 100) {
+    const factor = Number((volPercent / 100).toFixed(2));
+    args.push('-filter:a', `volume=${factor}`);
+  }
+
+  args.push(
     '-movflags', '+faststart',
     outputPath
   );
@@ -273,5 +298,7 @@ function stitchMediaStreams(params, options = {}) {
 module.exports = {
   getFFmpegPath,
   buildFFmpegArgs,
-  stitchMediaStreams
+  stitchMediaStreams,
+  parseFFmpegTime,
+  parseVolumePercent
 };

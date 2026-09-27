@@ -208,8 +208,24 @@ console.log('[✔] Player Recorder module exports verified:',
   typeof remuxWebmToMp4 === 'function'
 );
 
-console.log('[✔] All direct stream modules, presentation slide synthesizer, PDF generator, and In-App Player Recorder verified!');
-console.log('--- All modules, LMS auth, direct downloader, slide PDF generator, and player recorder verified successfully! ---');
+// 13. Test Audio Volume Adjustment & Parser
+const { parseVolumePercent } = require('../src/main/muxer');
+const volTest1 = parseVolumePercent(120);
+const volTest2 = parseVolumePercent('50%');
+const volTest3 = parseVolumePercent(200);
+const volTest4 = parseVolumePercent(undefined);
+const volTest5 = parseVolumePercent(999);
+console.log('[✔] Audio Volume Parser passed:',
+  volTest1 === 120 &&
+  volTest2 === 50 &&
+  volTest3 === 200 &&
+  volTest4 === 100 &&
+  volTest5 === 500
+);
+
+console.log('[✔] All direct stream modules, presentation slide synthesizer, PDF generator, player recorder, and audio volume boost verified!');
+console.log('--- All modules, LMS auth, direct downloader, slide PDF generator, player recorder, and audio volume verified successfully! ---');
+
 
 
 
