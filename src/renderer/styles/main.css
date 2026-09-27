@@ -718,6 +718,7 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
+  padding: 24px 16px;
 }
 
 .modal-overlay.active {
@@ -730,7 +731,10 @@ body {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 520px;
+  max-width: 540px;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
   box-shadow: var(--shadow-modal);
   overflow: hidden;
   transform: scale(0.97);
@@ -747,6 +751,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .modal-title {
@@ -776,6 +781,25 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
 }
 
 .setting-group {
@@ -878,6 +902,7 @@ input:checked + .toggle-slider:before {
   justify-content: flex-end;
   gap: 10px;
   background: var(--bg-base);
+  flex-shrink: 0;
 }
 
 /* Audio Volume Bar */
